@@ -22,8 +22,8 @@ WORKDIR /app
 COPY . .
 
 # 运行 CMake 和 build
-RUN cd src && cmake -S . -B build && \
-    cmake --build build
+#RUN cd src && cmake -S . -B build && \
+#    cmake --build build
 
 # ===================================================================
 # 阶段 2: 运行环境 (Runner Stage)
