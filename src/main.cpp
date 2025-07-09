@@ -1,4 +1,4 @@
-#include "MisumiGripper.h"
+#include "MisumiGripper.hpp"
 #include <iostream>
 #include <thread> // for std::this_thread::sleep_for
 #include <chrono> // for std::chrono::seconds

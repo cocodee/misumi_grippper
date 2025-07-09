@@ -1,5 +1,5 @@
 // MisumiGripper.cpp
-#include "MisumiGripper.h"
+#include "MisumiGripper.hpp"
 #include <modbus/modbus.h>
 #include <iostream>
 #include <vector>
