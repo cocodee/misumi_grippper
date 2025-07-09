@@ -5,9 +5,8 @@
 #include <string>
 #include <vector>
 #include <cstdint>
-
+#include <modbus/modbus.h>
 // 前向声明，避免在头文件中包含 libmodbus 的头文件
-struct modbus_t; 
 
 // 定义寄存器地址，提高可读性
 namespace GripperRegisters {
