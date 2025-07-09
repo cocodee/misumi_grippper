@@ -27,7 +27,7 @@ set(LIBMODBUS_INCLUDE_DIRS ${LIBMODBUS_INCLUDE_DIR})
 set(LIBMODBUS_LIBRARIES ${LIBMODBUS_LIBRARY})
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(Libmodbus DEFAULT_MSG
+find_package_handle_standard_args(libmodbus DEFAULT_MSG
     LIBMODBUS_LIBRARY LIBMODBUS_INCLUDE_DIR
 )
 
