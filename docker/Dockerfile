@@ -11,6 +11,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # 安装构建依赖：编译器、CMake 和 libmodbus 开发包
 RUN apt update && \
     apt install -y --no-install-recommends \
+    build-essential \
     g++ \
     cmake \
     libmodbus-dev \
