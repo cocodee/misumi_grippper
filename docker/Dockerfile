@@ -10,7 +10,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 #RUN sed -i 's#http://archive.ubuntu.com/ubuntu/#http://mirrors.aliyun.com/ubuntu/#' /etc/apt/sources.list
 # 安装构建依赖：编译器、CMake 和 libmodbus 开发包
 RUN apt update && \
-    aptt\ install -y --no-install-recommends \
+    apt install -y --no-install-recommends \
     g++ \
     cmake \
     libmodbus-dev \
