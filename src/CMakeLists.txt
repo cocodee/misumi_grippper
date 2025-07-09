@@ -6,6 +6,8 @@ project(misumi_gripper_controller VERSION 1.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# 告诉 CMake 在我们自己的 cmake 目录中查找模块
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 # --- 查找依赖库 ---
 # 查找 libmodbus 库
 # find_package 是现代 CMake 查找库的标准方式
