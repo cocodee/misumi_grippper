@@ -17,7 +17,7 @@ void printStatus(const GripperStatus& status) {
 
 int main() {
     // 替换为您的串口设备和夹爪ID
-    const char* device = "/dev/ttyUSB0"; // Linux
+    const char* device = "/dev/ttyS0"; // Linux
     // const char* device = "COM3";      // Windows
     int slave_id = 9; // 默认出厂ID
 
