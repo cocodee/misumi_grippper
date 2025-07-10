@@ -145,7 +145,13 @@ public:
      * @return true 如果配置成功, false 如果失败。
      */
     bool setPreset(int preset_number, double position_mm, int speed_percent, int torque_percent);
-    
+
+    /**
+     * @brief 执行一个预设的动作。
+     * @param preset_number 要执行的预设点编号 (1-8)。
+     * @return true 如果成功发送指令, false 如果失败。
+     */
+    bool executePreset(int preset_number);
 private:
     // 底层 Modbus 读写函数的封装
     bool writeRegister(int addr, uint16_t value);
