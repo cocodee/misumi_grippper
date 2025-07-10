@@ -17,7 +17,14 @@ namespace GripperRegisters {
     constexpr int TARGET_SPEED = 0x0FA3;
     constexpr int TARGET_TORQUE = 0x0FA4;
     constexpr int TRIGGER_ACTION = 0x0FA5;
+    // --- 新增：预设参数寄存器起始地址 ---
+    constexpr int PRESET_POS_1 = 0x0FA6;
+    constexpr int PRESET_SPEED_1 = 0x0FA7;
+    constexpr int PRESET_TORQUE_1 = 0x0FA8;
+    // ... 其他预设点可以通过偏移量计算
 
+    // --- 新增：停止控制寄存器 ---
+    constexpr int STOP_CONTROL = 0x0FBE; // 文档 6.2.10
     // 状态寄存器 (Input Registers)
     constexpr int INIT_STATUS = 0x1194;
     constexpr int FAULT_STATUS = 0x1195;
@@ -123,6 +130,22 @@ public:
      */
     bool readStatus(GripperStatus& status);
 
+    /**
+     * @brief 停止夹爪当前的运动。
+     * @return true 如果成功发送指令, false 如果失败。
+     */
+    bool stop();
+
+    /**
+     * @brief 配置一个预设参数点。
+     * @param preset_number 预设点编号 (1-8)。
+     * @param position_mm 目标位置 (单位: 毫米)。
+     * @param speed_percent 速度百分比 (1-100)。
+     * @param torque_percent 力矩百分比 (1-100)。
+     * @return true 如果配置成功, false 如果失败。
+     */
+    bool setPreset(int preset_number, double position_mm, int speed_percent, int torque_percent);
+    
 private:
     // 底层 Modbus 读写函数的封装
     bool writeRegister(int addr, uint16_t value);

@@ -128,6 +128,44 @@ bool MisumiGripper::readStatus(GripperStatus& status) {
 }
 
 
+bool MisumiGripper::stop() {
+    // 根据文档 6.2.10, 写入 0x01 到 0x0FBE 立即停止运行
+    return writeRegister(GripperRegisters::STOP_CONTROL, 0x0001);
+}
+
+bool MisumiGripper::setPreset(int preset_number, double position_mm, int speed_percent, int torque_percent) {
+    if (preset_number < 1 || preset_number > 8) {
+        m_last_error = "Preset number must be between 1 and 8.";
+        return false;
+    }
+
+    // 数据转换
+    uint16_t pos_val = static_cast<uint16_t>(std::round(position_mm * 100.0));
+    uint16_t speed_val = static_cast<uint16_t>(std::max(1, std::min(100, speed_percent)));
+    uint16_t torque_val = static_cast<uint16_t>(std::max(1, std::min(100, torque_percent)));
+
+    // 计算预设参数的起始地址
+    // 每个预设点占用 3 个寄存器 (位置, 速度, 力矩)
+    int start_addr = GripperRegisters::PRESET_POS_1 + (preset_number - 1) * 3;
+
+    // 使用 FC16 (Write Multiple Registers) 一次性写入三个参数
+    std::vector<uint16_t> values = {pos_val, speed_val, torque_val};
+    return writeRegisters(start_addr, values);
+}
+
+bool MisumiGripper::executePreset(int preset_number) {
+    if (preset_number < 1 || preset_number > 8) {
+        m_last_error = "Preset number must be between 1 and 8.";
+        return false;
+    }
+    
+    // 根据文档 6.2.2, 指令码从 0x08 (对应点1) 开始
+    uint16_t command_code = 0x0007 + preset_number; 
+    
+    // 使用 FC06 (Write Single Register) 写入指令码到控制模式寄存器
+    return writeRegister(GripperRegisters::CONTROL_MODE, command_code);
+}
+
 // Private helper methods
 bool MisumiGripper::writeRegister(int addr, uint16_t value) {
     if (!m_is_connected) {
