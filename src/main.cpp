@@ -15,11 +15,29 @@ void printStatus(const GripperStatus& status) {
 }
 
 
-int main() {
-    // 替换为您的串口设备和夹爪ID
-    const char* device = "/dev/ttyTHS1"; // Linux
-    // const char* device = "COM3";      // Windows
-    int slave_id = 9; // 默认出厂ID
+// main 函数现在接收命令行参数 argc 和 argv
+int main(int argc, char* argv[]) {
+    // --- 1. 解析命令行参数 ---
+    if (argc < 3) {
+        std::cerr << "Usage: " << argv[0] << " <device_path> <slave_id>" << std::endl;
+        std::cerr << "Example (Linux): " << argv[0] << " /dev/ttyTHS0 9" << std::endl;
+        std::cerr << "Example (Windows): " << argv[0] << " COM3 9" << std::endl;
+        return 1; // 返回错误码 1 表示参数错误
+    }
+
+    // 从命令行获取设备路径和从站ID
+    std::string device = argv[1];
+    int slave_id;
+
+    try {
+        slave_id = std::stoi(argv[2]);
+    } catch (const std::invalid_argument& e) {
+        std::cerr << "Error: Invalid slave ID. Must be an integer." << std::endl;
+        return 1;
+    } catch (const std::out_of_range& e) {
+        std::cerr << "Error: Slave ID is out of range." << std::endl;
+        return 1;
+    }
 
     // 1. 创建夹爪对象
     MisumiGripper gripper(device, slave_id);
