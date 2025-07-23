@@ -11,7 +11,7 @@
 #include "hardware_interface/types/hardware_interface_return_values.hpp"
 #include "rclcpp/macros.hpp"
 #include "rclcpp_lifecycle/state.hpp"
-#include "misumi_gripper_hardware/MisumiGripper.hpp"
+#include "MisumiGripper.hpp"
 
 namespace misumi_gripper_hardware
 {
