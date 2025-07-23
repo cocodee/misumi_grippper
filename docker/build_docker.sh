@@ -1,5 +1,5 @@
 #!/bin/bash
-IMAGE_NAME="misumi_base:latest"
+IMAGE_NAME="misumi_base:ros2"
 # Set proxy configuration
 PROXY_URL="http://192.168.4.6:8080"
 
@@ -17,4 +17,4 @@ PROXY_URL="http://192.168.4.6:8080"
 #  --build-arg NO_PROXY=localhost,127.0.0.1 \
 #  -t $IMAGE_NAME -f docker/Dockerfile .
 
-docker build -t $IMAGE_NAME -f docker/Dockerfile .
+docker build -t $IMAGE_NAME -f docker/Dockerfile-ros2 .
