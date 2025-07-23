@@ -1,0 +1,9 @@
+<library path="misumi_gripper_hardware">
+  <class name="misumi_gripper_hardware/MisumiGripperHardware"
+         type="misumi_gripper_hardware::MisumiGripperHardware"
+         base_class_type="hardware_interface::SystemInterface">
+    <description>
+      The Misumi gripper hardware interface.
+    </description>
+  </class>
+</library>

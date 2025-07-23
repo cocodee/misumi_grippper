@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<robot name="misumi_gripper" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:property name="prefix" value="" />
+
+    <!-- Link and Joint definitions -->
+    <link name="base_link"/>
+    <link name="gripper_finger_link">
+        <visual>
+            <geometry>
+                <box size="0.1 0.02 0.02"/>
+            </geometry>
+        </visual>
+        <collision>
+            <geometry>
+                <box size="0.1 0.02 0.02"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="0.1"/>
+            <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+        </inertial>
+    </link>
+
+    <joint name="gripper_joint" type="prismatic">
+        <parent link="base_link"/>
+        <child link="gripper_finger_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <axis xyz="1 0 0"/>
+        <limit lower="0.0" upper="0.025" effort="100" velocity="0.5"/>
+    </joint>
+
+    <!-- ros2_control -->
+    <ros2_control name="MisumiGripper" type="system">
+        <hardware>
+          <plugin>misumi_gripper_hardware/MisumiGripperHardware</plugin>
+          <param name="device">/dev/ttyTHS1</param>
+          <param name="slave_id">10</param>
+          <param name="baud_rate">$115200</param>
+          <param name="default_speed_percent">100</param>
+          <param name="default_torque_percent">100</param>
+        </hardware>
+      
+        <!-- Define the single joint for the gripper -->
+        <!-- The max_stroke should match your gripper's physical maximum opening in meters -->
+        <xacro:property name="max_stroke" value="0.05" /> <!-- Example: 50mm -->    
+        <joint name="gripper_joint">
+            <command_interface name="position">
+                <param name="min">0</param>
+                <param name="max">0.025</param> <!-- 25mm -->
+            </command_interface>
+            <state_interface name="position"/>
+        </joint>
+    </ros2_control>
+
+</robot>
