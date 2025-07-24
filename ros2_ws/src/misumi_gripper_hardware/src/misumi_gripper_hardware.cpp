@@ -51,7 +51,8 @@ hardware_interface::CallbackReturn MisumiGripperHardware::on_init(const hardware
   }
 
   hw_commands_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
-  hw_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
+  hw_states_position_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
+  hw_states_velocity_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
 
   return hardware_interface::CallbackReturn::SUCCESS;
 }
@@ -108,7 +109,9 @@ std::vector<hardware_interface::StateInterface> MisumiGripperHardware::export_st
 {
   std::vector<hardware_interface::StateInterface> state_interfaces;
   state_interfaces.emplace_back(hardware_interface::StateInterface(
-    info_.joints[0].name, hardware_interface::HW_IF_POSITION, &hw_states_[0]));
+    info_.joints[0].name, hardware_interface::HW_IF_POSITION, &hw_states_position_[0]));
+  state_interfaces.emplace_back(hardware_interface::StateInterface(
+    info_.joints[0].name, hardware_interface::HW_IF_VELOCITY, &hw_states_velocity_[0]));
   return state_interfaces;
 }
 
@@ -126,7 +129,8 @@ hardware_interface::return_type MisumiGripperHardware::read(const rclcpp::Time &
   if (gripper_client_->readStatus(status))
   {
     // The position unit in your class is mm, but ros2_control standard is meters.
-    hw_states_[0] = status.position_mm / 1000.0; 
+    hw_states_position_[0] = status.position_mm / 1000.0; 
+    hw_states_velocity_[0] = status.speed_percent;
   }
   else
   {

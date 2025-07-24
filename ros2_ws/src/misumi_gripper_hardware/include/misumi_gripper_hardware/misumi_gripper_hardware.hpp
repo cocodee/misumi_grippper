@@ -43,8 +43,8 @@ private:
   
   // Store the commands for the simulated robot
   std::vector<double> hw_commands_;
-  std::vector<double> hw_states_;
-
+  std::vector<double> hw_states_position_;
+  std::vector<double> hw_states_velocity_;
   // Parameters
   // Store hardware parameters
   std::string device_;
