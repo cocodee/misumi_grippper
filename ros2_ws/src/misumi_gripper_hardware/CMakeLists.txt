@@ -22,6 +22,7 @@ target_include_directories(misumi_gripper_hardware_plugin PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../src/include>
   $<INSTALL_INTERFACE:include>
+  ${MODBUS_INCLUDE_DIRS}
 )
 ament_target_dependencies(misumi_gripper_hardware_plugin
   hardware_interface
@@ -29,6 +30,9 @@ ament_target_dependencies(misumi_gripper_hardware_plugin
   rclcpp
 )
 target_link_libraries(misumi_gripper_hardware_plugin misumi_gripper_lib.a)
+target_link_libraries(misumi_gripper_hardware_plugin PRIVATE
+  ${MODBUS_LIBRARIES} 
+)
 
 pluginlib_export_plugin_description_file(hardware_interface misumi_gripper.xml)
 
