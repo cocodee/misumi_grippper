@@ -13,7 +13,8 @@ find_package(ament_cmake REQUIRED)
 find_package(hardware_interface REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(rclcpp REQUIRED)
-find_package(libmodbus) # Find the system-installed libmodbus
+pkg_check_modules(MODBUS REQUIRED libmodbus)
+ # Find the system-installed libmodbus
 
 # Add the hardware interface library
 add_library(misumi_gripper_hardware src/misumi_gripper_hardware.cpp)
@@ -27,7 +28,7 @@ ament_target_dependencies(misumi_gripper_hardware
   pluginlib
   rclcpp
 )
-target_link_libraries(misumi_gripper_hardware PUBLIC misumi_gripper_lib.a)
+target_link_libraries(misumi_gripper_hardware misumi_gripper_lib.a)
 
 pluginlib_export_plugin_description_file(hardware_interface src/misumi_gripper.xml)
 
