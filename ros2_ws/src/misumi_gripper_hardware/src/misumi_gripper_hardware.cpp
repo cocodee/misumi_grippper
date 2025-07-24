@@ -1,7 +1,7 @@
 #include "misumi_gripper_hardware/misumi_gripper_hardware.hpp"
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
 #include "rclcpp/logging.hpp"
-
+#include <cmath>
 namespace misumi_gripper_hardware
 {
 
@@ -13,9 +13,11 @@ hardware_interface::CallbackReturn MisumiGripperHardware::on_init(const hardware
   }
 
   // Get hardware parameters
-  serial_port_ = info_.hardware_parameters["serial_port"];
+  device_ = info_.hardware_parameters["device"];
   slave_id_ = std::stoi(info_.hardware_parameters["slave_id"]);
   baud_rate_ = std::stoi(info_.hardware_parameters["baud_rate"]);
+  default_speed_percent_ = std::stoi(info_.hardware_parameters["default_speed_percent"]);
+  default_torque_percent_ = std::stoi(info_.hardware_parameters["default_torque_percent"]);
 
   // Check joints
   if (info_.joints.size() != 1)
@@ -57,7 +59,7 @@ hardware_interface::CallbackReturn MisumiGripperHardware::on_init(const hardware
 hardware_interface::CallbackReturn MisumiGripperHardware::on_configure(const rclcpp_lifecycle::State & /*previous_state*/)
 {
   RCLCPP_INFO(rclcpp::get_logger("MisumiGripperHardware"), "Configuring Misumi Gripper Hardware...");
-  gripper_client_ = std::make_unique<MisumiGripper>(serial_port_, slave_id_, baud_rate_);
+  gripper_client_ = std::make_unique<MisumiGripper>(device_, slave_id_, baud_rate_);
   if (!gripper_client_->connect())
   {
     RCLCPP_ERROR(rclcpp::get_logger("MisumiGripperHardware"), "Failed to connect to gripper: %s", gripper_client_->getLastError().c_str());
@@ -90,11 +92,14 @@ hardware_interface::CallbackReturn MisumiGripperHardware::on_activate(const rclc
 hardware_interface::CallbackReturn MisumiGripperHardware::on_deactivate(const rclcpp_lifecycle::State & /*previous_state*/)
 {
   RCLCPP_INFO(rclcpp::get_logger("MisumiGripperHardware"), "Deactivating Misumi Gripper Hardware...");
-  if (!gripper_client_->disable())
-  {
-      RCLCPP_ERROR(rclcpp::get_logger("MisumiGripperHardware"), "Failed to disable gripper: %s", gripper_client_->getLastError().c_str());
-      return hardware_interface::CallbackReturn::ERROR;
+  if (gripper_client_){
+      if (!gripper_client_->disable())
+      {
+          RCLCPP_ERROR(rclcpp::get_logger("MisumiGripperHardware"), "Failed to disable gripper: %s", gripper_client_->getLastError().c_str());
+          return hardware_interface::CallbackReturn::ERROR;
+      }
   }
+
   RCLCPP_INFO(rclcpp::get_logger("MisumiGripperHardware"), "Gripper disabled.");
   return hardware_interface::CallbackReturn::SUCCESS;
 }
@@ -136,7 +141,7 @@ hardware_interface::return_type MisumiGripperHardware::write(const rclcpp::Time 
   {
     // The position unit in ros2_control is meters, convert to mm for your class.
     double position_mm = hw_commands_[0] * 1000.0;
-    if (!gripper_client_->moveTo(position_mm))
+    if (!gripper_client_->moveTo(position_mm, default_speed_percent_, default_torque_percent_))
     {
        RCLCPP_WARN(rclcpp::get_logger("MisumiGripperHardware"), "Failed to move gripper: %s", gripper_client_->getLastError().c_str());
     }

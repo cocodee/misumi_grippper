@@ -46,9 +46,12 @@ private:
   std::vector<double> hw_states_;
 
   // Parameters
-  std::string serial_port_;
+  // Store hardware parameters
+  std::string device_;
   int slave_id_;
   int baud_rate_;
+  int default_speed_percent_;
+  int default_torque_percent_;
 };
 
 }  // namespace misumi_gripper_hardware
