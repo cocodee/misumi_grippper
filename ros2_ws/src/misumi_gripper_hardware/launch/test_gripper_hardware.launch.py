@@ -1,7 +1,7 @@
 import os
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, RegisterEventHandler
-from launch.event_handlers import OnProcessExit
+from launch.event_handlers import OnProcessStart
 from launch.substitutions import LaunchConfiguration, Command, PathJoinSubstitution
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
@@ -76,7 +76,7 @@ def generate_launch_description():
     robot_state_publisher_node = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
-        output='screen',
+        output='both',
         parameters=[robot_description]
     )
 
@@ -96,18 +96,19 @@ def generate_launch_description():
         output="screen",
     )
 
-    # Use an event handler to launch the gripper controller spawner after the joint state broadcaster spawner exits
     delay_gripper_controller_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=joint_state_broadcaster_spawner,
-            on_exit=[gripper_controller_spawner],
+        event_handler= OnProcessStart(
+            target_action=controller_manager,
+            on_start=[
+                joint_state_broadcaster_spawner,
+                gripper_controller_spawner,
+            ],
         )
-    )
+    )    
 
     nodes_to_start = [
+        robot_state_publisher_node,        
         controller_manager,
-        robot_state_publisher_node,
-        joint_state_broadcaster_spawner,
         delay_gripper_controller_spawner,
     ]
 
