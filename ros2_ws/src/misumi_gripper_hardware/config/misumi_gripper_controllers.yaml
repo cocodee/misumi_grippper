@@ -1,23 +1,18 @@
 controller_manager:
   ros__parameters:
-    update_rate: 30 # Hz
+    update_rate: 30  # Hz
 
-    # The list of controllers to be loaded and started
+    # -- 控制器配置 --
+    # 将所有控制器的定义都放在 controller_manager.ros__parameters 下面
+
+    # 1. Joint State Broadcaster 的配置
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
+    # 2. Gripper Action Controller 的完整配置
     misumi_gripper_controller:
       type: gripper_controllers/GripperActionController
-
-# Parameters for the GripperActionController
-misumi_gripper_controller:
-  ros__parameters:
-    joint: gripper_joint # Must match the joint name in the URDF
-    goal_tolerance: 0.001 # meters (1mm)
-    
-    # These are the positions for "open" and "closed" states
-    # GripperCommand action defines "position" from 0.0 (closed) to 1.0 (open)
-    # The controller maps these to the real joint limits.
-    # It is recommended to use the joint limits from the URDF instead.
-    # The controller will read them automatically if they are defined.
-    # We will define them in the URDF.
+      # --- 所有特定于该控制器的参数都应该在这里 ---
+      joint: gripper_joint      # 确保这个名字与 URDF 中的关节名完全匹配
+      goal_tolerance: 0.001     # meters (1mm)
+      # 其他 gripper_controllers/GripperActionController 可能需要的参数...
