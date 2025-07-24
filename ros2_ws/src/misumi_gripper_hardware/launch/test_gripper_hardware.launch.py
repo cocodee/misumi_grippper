@@ -5,7 +5,8 @@ from launch.event_handlers import OnProcessExit
 from launch.substitutions import LaunchConfiguration, Command, PathJoinSubstitution
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
-# ament_index_python is not needed when using FindPackageShare substitution
+# 导入 ParameterValue
+from launch_ros.parameter_descriptions import ParameterValue
 
 def generate_launch_description():
 
@@ -28,7 +29,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "controllers_file_package",
-            default_value="misumi_gripper_hardware", # Assuming it's in the same package
+            default_value="misumi_gripper_hardware",
             description="Package with controller configuration file.",
         )
     )
@@ -51,7 +52,12 @@ def generate_launch_description():
         [FindPackageShare(robot_description_package), robot_description_file]
     )
     robot_description_content = Command(["xacro", " ", robot_description_path])
-    robot_description = {"robot_description": robot_description_content}
+    
+    # *** 这是关键的修改 ***
+    # 使用 ParameterValue 包装 Command 的结果，并指定其类型为 str
+    robot_description = {
+        "robot_description": ParameterValue(robot_description_content, value_type=str)
+    }
 
     # Get controller config path
     gripper_controller_config = PathJoinSubstitution(
@@ -75,7 +81,6 @@ def generate_launch_description():
     )
 
     # Spawner for Joint State Broadcaster
-    # Note: We start this one first, as other controllers may depend on it.
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
@@ -84,7 +89,6 @@ def generate_launch_description():
     )
 
     # Spawner for the main gripper controller
-    # This spawner is delayed until the joint_state_broadcaster_spawner has finished successfully.
     gripper_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
@@ -93,7 +97,6 @@ def generate_launch_description():
     )
 
     # Use an event handler to launch the gripper controller spawner after the joint state broadcaster spawner exits
-    # This solves the race condition.
     delay_gripper_controller_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(
             target_action=joint_state_broadcaster_spawner,
@@ -105,7 +108,7 @@ def generate_launch_description():
         controller_manager,
         robot_state_publisher_node,
         joint_state_broadcaster_spawner,
-        delay_gripper_controller_spawner, # This will trigger the gripper_controller_spawner
+        delay_gripper_controller_spawner,
     ]
 
     return LaunchDescription(declared_arguments + nodes_to_start)
