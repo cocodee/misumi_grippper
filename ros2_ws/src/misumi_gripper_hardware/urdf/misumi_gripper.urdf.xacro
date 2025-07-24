@@ -36,7 +36,7 @@
           <plugin>misumi_gripper_hardware/MisumiGripperHardware</plugin>
           <param name="device">/dev/ttyTHS1</param>
           <param name="slave_id">10</param>
-          <param name="baud_rate">$115200</param>
+          <param name="baud_rate">115200</param>
           <param name="default_speed_percent">100</param>
           <param name="default_torque_percent">100</param>
         </hardware>
