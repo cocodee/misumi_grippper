@@ -17,23 +17,23 @@ pkg_check_modules(MODBUS REQUIRED libmodbus)
  # Find the system-installed libmodbus
 
 # Add the hardware interface library
-add_library(misumi_gripper_hardware src/misumi_gripper_hardware.cpp)
-target_include_directories(misumi_gripper_hardware PUBLIC
+add_library(misumi_gripper_hardware_plugin SHARED src/misumi_gripper_hardware.cpp)
+target_include_directories(misumi_gripper_hardware_plugin PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../src/include>
   $<INSTALL_INTERFACE:include>
 )
-ament_target_dependencies(misumi_gripper_hardware
+ament_target_dependencies(misumi_gripper_hardware_plugin
   hardware_interface
   pluginlib
   rclcpp
 )
-target_link_libraries(misumi_gripper_hardware misumi_gripper_lib.a)
+target_link_libraries(misumi_gripper_hardware_plugin misumi_gripper_lib.a)
 
 pluginlib_export_plugin_description_file(hardware_interface src/misumi_gripper.xml)
 
 install(TARGETS
-  misumi_gripper_hardware
+  misumi_gripper_hardware_plugin
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin)
@@ -51,7 +51,7 @@ install(DIRECTORY
   DESTINATION share/${PROJECT_NAME})
 
 install(
-  FILES src/misumi_gripper.xml
+  FILES misumi_gripper.xml
   DESTINATION share/${PROJECT_NAME}
 )  
 

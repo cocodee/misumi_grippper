@@ -1,4 +1,4 @@
-<library path="misumi_gripper_hardware">
+<library path="misumi_gripper_hardware_plugin">
   <class name="misumi_gripper_hardware/MisumiGripperHardware"
          type="misumi_gripper_hardware::MisumiGripperHardware"
          base_class_type="hardware_interface::SystemInterface">
