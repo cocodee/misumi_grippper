@@ -30,7 +30,7 @@ ament_target_dependencies(misumi_gripper_hardware_plugin
 )
 target_link_libraries(misumi_gripper_hardware_plugin misumi_gripper_lib.a)
 
-pluginlib_export_plugin_description_file(hardware_interface src/misumi_gripper.xml)
+pluginlib_export_plugin_description_file(hardware_interface misumi_gripper.xml)
 
 install(TARGETS
   misumi_gripper_hardware_plugin
