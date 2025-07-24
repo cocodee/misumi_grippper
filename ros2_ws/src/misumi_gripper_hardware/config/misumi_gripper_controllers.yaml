@@ -7,7 +7,7 @@ controller_manager:
       type: joint_state_broadcaster/JointStateBroadcaster
 
     misumi_gripper_controller:
-      type: gripper_controllers/GripperActionController
+      type: position_controllers/GripperActionController
 
 # Parameters for the GripperActionController
 misumi_gripper_controller:
