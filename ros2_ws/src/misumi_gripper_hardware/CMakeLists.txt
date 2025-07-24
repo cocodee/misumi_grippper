@@ -15,7 +15,10 @@ find_package(pluginlib REQUIRED)
 find_package(rclcpp REQUIRED)
 pkg_check_modules(MODBUS REQUIRED libmodbus)
  # Find the system-installed libmodbus
-
+find_library(MISUMI_GRIPPER_LIBRARY
+ NAMES misumi_gripper_lib
+ REQUIRED
+)
 # Add the hardware interface library
 add_library(misumi_gripper_hardware_plugin SHARED src/misumi_gripper_hardware.cpp)
 target_include_directories(misumi_gripper_hardware_plugin PUBLIC
@@ -29,9 +32,9 @@ ament_target_dependencies(misumi_gripper_hardware_plugin
   pluginlib
   rclcpp
 )
-target_link_libraries(misumi_gripper_hardware_plugin misumi_gripper_lib.a)
 target_link_libraries(misumi_gripper_hardware_plugin PRIVATE
   ${MODBUS_LIBRARIES} 
+  ${MISUMI_GRIPPER_LIBRARY}
 )
 
 pluginlib_export_plugin_description_file(hardware_interface misumi_gripper.xml)
