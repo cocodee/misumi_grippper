@@ -50,4 +50,9 @@ install(DIRECTORY
   urdf
   DESTINATION share/${PROJECT_NAME})
 
+install(
+  FILES misumi_gripper.xml
+  DESTINATION share/${PROJECT_NAME}
+)  
+
 ament_package()
