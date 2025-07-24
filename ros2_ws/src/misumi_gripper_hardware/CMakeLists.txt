@@ -60,6 +60,9 @@ install(DIRECTORY
   urdf
   DESTINATION share/${PROJECT_NAME})
 
+install(DIRECTORY config
+  DESTINATION share/${PROJECT_NAME}
+)
 install(
   FILES misumi_gripper.xml
   DESTINATION share/${PROJECT_NAME}
