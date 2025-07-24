@@ -33,8 +33,8 @@ ament_target_dependencies(misumi_gripper_hardware_plugin
   rclcpp
 )
 target_link_libraries(misumi_gripper_hardware_plugin PRIVATE
+  ${MISUMI_GRIPPER_LIBRARY} 
   ${MODBUS_LIBRARIES} 
-  ${MISUMI_GRIPPER_LIBRARY}
 )
 
 pluginlib_export_plugin_description_file(hardware_interface misumi_gripper.xml)
