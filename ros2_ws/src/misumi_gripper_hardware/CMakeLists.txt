@@ -27,13 +27,14 @@ target_include_directories(misumi_gripper_hardware_plugin PUBLIC
   $<INSTALL_INTERFACE:include>
   ${MODBUS_INCLUDE_DIRS}
 )
-#ament_target_dependencies(misumi_gripper_hardware_plugin
- # hardware_interface
- # pluginlib
- # rclcpp
-#)
+ament_target_dependencies(misumi_gripper_hardware_plugin
+  hardware_interface
+  pluginlib
+  rclcpp
+)
 
-target_link_libraries(misumi_gripper_hardware_plugin PRIVATE
+target_link_libraries(misumi_gripper_hardware_plugin 
+  PRIVATE
   hardware_interface::hardware_interface
   pluginlib::pluginlib
   rclcpp::rclcpp
