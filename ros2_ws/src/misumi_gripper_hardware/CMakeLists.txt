@@ -51,7 +51,7 @@ install(DIRECTORY
   DESTINATION share/${PROJECT_NAME})
 
 install(
-  FILES misumi_gripper.xml
+  FILES src/misumi_gripper.xml
   DESTINATION share/${PROJECT_NAME}
 )  
 
