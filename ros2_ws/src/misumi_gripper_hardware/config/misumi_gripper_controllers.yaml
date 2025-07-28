@@ -12,7 +12,8 @@ controller_manager:
 # Parameters for the GripperActionController
 misumi_gripper_controller:
   ros__parameters:
-    joint: gripper_joint # Must match the joint name in the URDF
+    joints: 
+      - gripper_joint # Must match the joint name in the URDF
     interface_name: position
     
     # These are the positions for "open" and "closed" states
