@@ -7,13 +7,13 @@ controller_manager:
       type: joint_state_broadcaster/JointStateBroadcaster
 
     misumi_gripper_controller:
-      type: position_controllers/GripperActionController
+      type: forward_command_controller/ForwardCommandController
 
 # Parameters for the GripperActionController
 misumi_gripper_controller:
   ros__parameters:
     joint: gripper_joint # Must match the joint name in the URDF
-    goal_tolerance: 0.001 # meters (1mm)
+    interface_name: position
     
     # These are the positions for "open" and "closed" states
     # GripperCommand action defines "position" from 0.0 (closed) to 1.0 (open)
