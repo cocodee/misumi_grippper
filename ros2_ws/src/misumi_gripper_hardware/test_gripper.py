@@ -3,8 +3,9 @@
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import Float64MultiArray
+from rclpy.publisher import Publisher
 import time
-
+from sensor_msgs.msg import JointState
 class GripperCommandPublisher(Node):
     """
     一个用于测试 ForwardCommandController 的 Python 节点。
@@ -20,10 +21,21 @@ class GripperCommandPublisher(Node):
         # 消息类型是 std_msgs.msg.Float64MultiArray
         self.publisher_ = self.create_publisher(Float64MultiArray, topic_name, 10)
         
+        self.subscription = self.node.create_subscription(
+            JointState,
+            '/misumi_gripper/joint_states',  # 假设你已经将话题重命名
+            self.joint_state_callback,
+            10)
         # 等待一秒钟，确保发布者和订阅者之间建立连接
         time.sleep(1.0)
         
         self.get_logger().info(f"创建 Publisher，发布到 '{topic_name}'...")
+
+
+    def joint_state_callback(self, msg):
+        """回调函数，保存最新的 /joint_states 消息"""
+        self.last_joint_state = msg
+        print(f'gripper_joint_states:{msg}')
 
     def send_position_command(self, position: float):
         """
