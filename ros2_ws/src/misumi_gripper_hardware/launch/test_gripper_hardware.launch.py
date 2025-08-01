@@ -84,11 +84,11 @@ def generate_launch_description():
     gripper_joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        namespace='',
+        namespace='misumi_gripper',
         arguments=["gripper_joint_state_broadcaster", "--controller-manager", "/controller_manager"],
         output="screen",
         remappings=[
-            ('/joint_states', '/misumi_gripper/joint_states'),  # Remaps a topic
+            ('joint_states', 'misumi_gripper/joint_states'),  # Remaps a topic
                 # Add more remapping rules as needed
         ]
     )
