@@ -21,7 +21,7 @@ class GripperCommandPublisher(Node):
         # 消息类型是 std_msgs.msg.Float64MultiArray
         self.publisher_ = self.create_publisher(Float64MultiArray, topic_name, 10)
         
-        self.subscription = self.node.create_subscription(
+        self.subscription = self.create_subscription(
             JointState,
             '/misumi_gripper/joint_states',  # 假设你已经将话题重命名
             self.joint_state_callback,
