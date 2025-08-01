@@ -23,7 +23,6 @@ misumi_gripper_controller:
     # The controller will read them automatically if they are defined.
     # We will define them in the URDF.
 gripper_joint_state_broadcaster:
-  type: joint_state_broadcaster/JointStateBroadcaster
   ros__parameters:
     # --- 这是解决问题的关键 ---
     topic_name: /misumi_gripper/joint_states
