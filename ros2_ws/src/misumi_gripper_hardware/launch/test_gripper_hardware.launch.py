@@ -81,10 +81,10 @@ def generate_launch_description():
     )
 
     # Spawner for Joint State Broadcaster
-    joint_state_broadcaster_spawner = Node(
+    gripper_joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
+        arguments=["gripper_joint_state_broadcaster", "--controller-manager", "/controller_manager"],
         output="screen",
     )
 
@@ -100,7 +100,7 @@ def generate_launch_description():
         event_handler= OnProcessStart(
             target_action=controller_manager,
             on_start=[
-                joint_state_broadcaster_spawner,
+                gripper_joint_state_broadcaster_spawner,
                 gripper_controller_spawner,
             ],
         )
