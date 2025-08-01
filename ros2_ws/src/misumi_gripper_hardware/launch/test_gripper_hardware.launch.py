@@ -86,6 +86,9 @@ def generate_launch_description():
         executable="spawner",
         arguments=["gripper_joint_state_broadcaster", "--controller-manager", "/controller_manager"],
         output="screen",
+        remappings=[
+            ('/joint_states', '/misumi_gripper/joint_states'),
+        ]        
     )
 
     # Spawner for the main gripper controller
