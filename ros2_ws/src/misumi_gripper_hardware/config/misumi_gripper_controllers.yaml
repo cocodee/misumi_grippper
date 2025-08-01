@@ -2,16 +2,10 @@ controller_manager:
   ros__parameters:
     update_rate: 30 # Hz
 
-    # The list of controllers to be loaded and started
-    gripper_joint_state_broadcaster:
-      type: joint_state_broadcaster/JointStateBroadcaster
-
-    misumi_gripper_controller:
-      type: forward_command_controller/ForwardCommandController
-
 # Parameters for the GripperActionController
 misumi_gripper_controller:
   ros__parameters:
+    type: forward_command_controller/ForwardCommandController
     joints: 
       - gripper_joint # Must match the joint name in the URDF
     interface_name: position
