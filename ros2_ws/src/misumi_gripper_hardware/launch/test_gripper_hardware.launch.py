@@ -84,13 +84,15 @@ def generate_launch_description():
     gripper_joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        namespace='ns',
-        arguments=["gripper_joint_state_broadcaster", "--controller-manager", "/controller_manager"],
+        arguments=["gripper_joint_state_broadcaster", "--controller-manager", "/controller_manager",
+                          
+        # --- 以下是关键的修改 ---
+        "--ros-args",                               # 告诉 spawner 后续是 ROS 参数
+        "-r",                                       # -r 是 --remap 的缩写
+        # 将控制器节点的私有话题 ~/joint_states 重映射到你想要的目标话题
+        "~/joint_states:=/misumi_gripper/joint_states" 
+        ],
         output="screen",
-        remappings=[
-            ('/ns/joint_states', '/misumi_gripper/joint_states'),  # Remaps a topic
-                # Add more remapping rules as needed
-        ]
     )
 
     # Spawner for the main gripper controller
