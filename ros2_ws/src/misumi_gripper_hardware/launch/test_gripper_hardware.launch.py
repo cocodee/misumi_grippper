@@ -84,6 +84,7 @@ def generate_launch_description():
     gripper_joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
+        namespace='',
         arguments=["gripper_joint_state_broadcaster", "--controller-manager", "/controller_manager"],
         output="screen",
         remappings=[
