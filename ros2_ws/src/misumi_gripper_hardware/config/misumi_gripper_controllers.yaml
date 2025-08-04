@@ -10,7 +10,7 @@
       type: forward_command_controller/ForwardCommandController
 
 # Parameters for the GripperActionController
-misumi_gripper_controller:
+/misumi/misumi_gripper_controller:
   ros__parameters:
     joints: 
       - gripper_joint # Must match the joint name in the URDF
