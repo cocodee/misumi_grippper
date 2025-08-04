@@ -70,6 +70,11 @@ def generate_launch_description():
         executable="ros2_control_node",
         parameters=[robot_description, gripper_controller_config],
         output="screen",
+        remappings=[
+        ("/joint_states", "/misumi_gripper/joint_states"),
+        # You can add other remappings here too
+        # ("/diff_drive_controller/cmd_vel_unstamped", "/cmd_vel"), 
+    ]
     )
 
     # Robot State Publisher Node
@@ -84,8 +89,7 @@ def generate_launch_description():
     gripper_joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["gripper_joint_state_broadcaster", "--controller-manager", "/controller_manager",
-                   "--controller-ros-args","-r","/joint_states:/misumi_gripper/joint_states"]
+        arguments=["gripper_joint_state_broadcaster", "--controller-manager", "/controller_manager"]
     )
 
     # Spawner for the main gripper controller
