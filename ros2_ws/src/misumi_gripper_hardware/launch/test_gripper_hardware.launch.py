@@ -83,7 +83,13 @@ def generate_launch_description():
         package='robot_state_publisher',
         executable='robot_state_publisher',
         output='both',
-        parameters=[robot_description],
+       parameters=[
+        {
+            'robot_description': robot_description,
+            # 添加下面这个参数！
+            'frame_prefix': 'misumi/'
+        }
+        ],
         remappings=[
         ("/joint_states", "/misumi_gripper/joint_states")
         ],
