@@ -74,7 +74,8 @@ def generate_launch_description():
         ("/joint_states", "/misumi_gripper/joint_states"),
         # You can add other remappings here too
         # ("/diff_drive_controller/cmd_vel_unstamped", "/cmd_vel"), 
-    ]
+    ],
+    namespace="misumi"
     )
 
     # Robot State Publisher Node
@@ -85,7 +86,8 @@ def generate_launch_description():
         parameters=[robot_description],
         remappings=[
         ("/joint_states", "/misumi_gripper/joint_states")
-        ]
+        ],
+        namespace="misumi"
     )
 
     # Spawner for Joint State Broadcaster
