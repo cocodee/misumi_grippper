@@ -86,7 +86,6 @@ def generate_launch_description():
         remappings=[
         ("/joint_states", "/misumi_gripper/joint_states")
         ]
-    ]
     )
 
     # Spawner for Joint State Broadcaster
