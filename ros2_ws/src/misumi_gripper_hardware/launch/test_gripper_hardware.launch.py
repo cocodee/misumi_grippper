@@ -82,7 +82,11 @@ def generate_launch_description():
         package='robot_state_publisher',
         executable='robot_state_publisher',
         output='both',
-        parameters=[robot_description]
+        parameters=[robot_description],
+        remappings=[
+        ("/joint_states", "/misumi_gripper/joint_states")
+        ]
+    ]
     )
 
     # Spawner for Joint State Broadcaster
