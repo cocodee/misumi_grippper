@@ -85,7 +85,7 @@ def generate_launch_description():
         output='both',
        parameters=[
         {
-            'robot_description': robot_description,
+            'robot_description': robot_description_content,
             # 添加下面这个参数！
             'frame_prefix': 'misumi/'
         }
