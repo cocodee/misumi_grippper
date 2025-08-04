@@ -84,7 +84,8 @@ def generate_launch_description():
     gripper_joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["gripper_joint_state_broadcaster", "--controller-manager", "/controller_manager"]
+        arguments=["gripper_joint_state_broadcaster", "--controller-manager", "/controller_manager",
+                   "--controller-ros-args","-r","/joint_states","/misumi_gripper/joint_states"]
     )
 
     # Spawner for the main gripper controller
