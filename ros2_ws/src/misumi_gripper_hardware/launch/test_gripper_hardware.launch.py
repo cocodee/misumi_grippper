@@ -94,17 +94,15 @@ def generate_launch_description():
     gripper_joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["gripper_joint_state_broadcaster", "--controller-manager", "/controller_manager"],
-        namespace="misumi"
+        arguments=["gripper_joint_state_broadcaster", "--controller-manager", "/misumi/controller_manager"],
     )
 
     # Spawner for the main gripper controller
     gripper_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["misumi_gripper_controller", "--controller-manager", "/controller_manager"],
+        arguments=["misumi_gripper_controller", "--controller-manager", "/misumi/controller_manager"],
         output="screen",
-        namespace="misumi"
     )
 
     delay_gripper_controller_spawner = RegisterEventHandler(
