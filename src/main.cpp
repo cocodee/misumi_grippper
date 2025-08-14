@@ -46,17 +46,13 @@ int main(int argc, char* argv[]) {
     // Handle connection error
         return -1;
     }
+      // 2. 连接
+    std::cout << "Connection successful." << std::endl;
+    std::this_thread::sleep_for(std::chrono::seconds(1));
     // 1. 创建夹爪对象
     MisumiGripper gripper(*m_gripper_bus, slave_id);
 
-    // 2. 连接
-    std::cout << "Connecting to gripper on " << device << "..." << std::endl;
-    if (!gripper.connect()) {
-        std::cerr << "Error: " << gripper.getLastError() << std::endl;
-        return -1;
-    }
-    std::cout << "Connection successful." << std::endl;
-    std::this_thread::sleep_for(std::chrono::seconds(1));
+  
 
     // 3. 使能夹爪
     std::cout << "Enabling gripper..." << std::endl;
@@ -114,7 +110,7 @@ int main(int argc, char* argv[]) {
 
     // 9. 断开连接 (析构函数会自动调用, 这里显式调用作为演示)
     std::cout << "Disconnecting..." << std::endl;
-    gripper.disconnect();
+    m_gripper_bus->disconnect();
     
     std::cout << "Demo finished." << std::endl;
 
