@@ -39,7 +39,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    auto m_gripper_bus = std::make_unique<MisumiGripperBus>("/dev/ttyUSB0", 115200);
+    auto m_gripper_bus = std::make_unique<MisumiGripperBus>(device, 115200);
 
     if (!m_gripper_bus->connect()) {
         std::cerr << "Error: Failed to connect to gripper bus." << std::endl;
