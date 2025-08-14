@@ -102,7 +102,16 @@ int main(int argc, char* argv[]) {
     if (gripper.readStatus(status)) {
         printStatus(status);
     }
-    
+
+    // 6. 移动到指定位置
+    std::cout << "\nMoving to 40.0 mm with 50% speed and 80% torque..." << std::endl;
+    if (!gripper.moveTo(40.0, 50, 80)) {
+         std::cerr << "Error moving to position: " << gripper.getLastError() << std::endl;
+    }
+    std::this_thread::sleep_for(std::chrono::seconds(3));
+    if (gripper.readStatus(status)) {
+        printStatus(status);
+    }    
     // 8. 去使能
     std::cout << "\nDisabling gripper..." << std::endl;
     gripper.disable();
