@@ -24,10 +24,6 @@ bool MisumiGripper::disable() {
 }
 
 bool MisumiGripper::moveTo(double position_mm, int speed_percent, int torque_percent) {
-    if (!m_is_connected) {
-        m_last_error = "Not connected.";
-        return false;
-    }
     
     // 数据转换和范围检查
     // 位置单位是 0.01mm
