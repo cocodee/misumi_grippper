@@ -39,8 +39,15 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    auto m_gripper_bus = std::make_unique<MisumiGripperBus>("/dev/ttyUSB0", 115200);
+
+    if (!m_gripper_bus->connect()) {
+        std::cerr << "Error: Failed to connect to gripper bus." << std::endl;
+    // Handle connection error
+        return -1;
+    }
     // 1. 创建夹爪对象
-    MisumiGripper gripper(device, slave_id);
+    MisumiGripper gripper(*m_gripper_bus, slave_id);
 
     // 2. 连接
     std::cout << "Connecting to gripper on " << device << "..." << std::endl;
