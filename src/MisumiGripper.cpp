@@ -8,9 +8,6 @@
 MisumiGripper::MisumiGripper(MisumiGripperBus& bus, int slave_id)
     : m_bus(bus), m_slave_id(slave_id) {}
 MisumiGripper::~MisumiGripper() {}
-bool MisumiGripper::isConnected() const {
-    return m_is_connected;
-}
 
 std::string MisumiGripper::getLastError() const {
     return m_last_error.empty() ? m_bus.getLastError() : m_last_error;
@@ -52,19 +49,19 @@ bool MisumiGripper::moveTo(double position_mm, int speed_percent, int torque_per
 
 bool MisumiGripper::grip() {
     // 根据文档6.2.2, 0x05: 全力全速关闭
-    return mbus_.writeRegister(m_slave_id,GripperRegisters::CONTROL_MODE, 0x0005);
+    return m_bus.writeRegister(m_slave_id,GripperRegisters::CONTROL_MODE, 0x0005);
 }
 
 bool MisumiGripper::open() {
     // 根据文档6.2.2, 0x04: 全力全速打开
-    return mbus_.writeRegister(m_slave_id,GripperRegisters::CONTROL_MODE, 0x0004);
+    return m_bus.writeRegister(m_slave_id,GripperRegisters::CONTROL_MODE, 0x0004);
 }
 
 bool MisumiGripper::readStatus(GripperStatus& status) {
     const int NUM_REGS_TO_READ = 6;
     uint16_t buffer[NUM_REGS_TO_READ];
     
-    if (!mbus_.readRegisters(m_slave_id, GripperRegisters::INIT_STATUS, NUM_REGS_TO_READ, buffer)) {
+    if (!m_bus.readRegisters(m_slave_id, GripperRegisters::INIT_STATUS, NUM_REGS_TO_READ, buffer)) {
         return false;
     }
     
@@ -82,7 +79,7 @@ bool MisumiGripper::readStatus(GripperStatus& status) {
 
 bool MisumiGripper::stop() {
     // 根据文档 6.2.10, 写入 0x01 到 0x0FBE 立即停止运行
-    return mbus_.writeRegister(m_slave_id, GripperRegisters::STOP_CONTROL, 0x0001);
+    return m_bus.writeRegister(m_slave_id, GripperRegisters::STOP_CONTROL, 0x0001);
 }
 
 bool MisumiGripper::setPreset(int preset_number, double position_mm, int speed_percent, int torque_percent) {
@@ -102,7 +99,7 @@ bool MisumiGripper::setPreset(int preset_number, double position_mm, int speed_p
 
     // 使用 FC16 (Write Multiple Registers) 一次性写入三个参数
     std::vector<uint16_t> values = {pos_val, speed_val, torque_val};
-    return mbus_.writeRegisters(m_slave_id, start_addr, values);
+    return m_bus.writeRegisters(m_slave_id, start_addr, values);
 }
 
 bool MisumiGripper::executePreset(int preset_number) {
@@ -115,7 +112,7 @@ bool MisumiGripper::executePreset(int preset_number) {
     uint16_t command_code = 0x0007 + preset_number; 
     
     // 使用 FC06 (Write Single Register) 写入指令码到控制模式寄存器
-    return mbus_.writeRegister(m_slave_id, GripperRegisters::CONTROL_MODE, command_code);
+    return m_bus.writeRegister(m_slave_id, GripperRegisters::CONTROL_MODE, command_code);
 }
 
 // Private helper methods
