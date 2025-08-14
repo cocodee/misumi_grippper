@@ -17,6 +17,7 @@ find_package(libmodbus REQUIRED)
 # 将我们的夹爪控制逻辑编译成一个静态库 (misumi_gripper_lib)
 add_library(misumi_gripper_lib SHARED
     MisumiGripper.cpp
+    MisumiGripperBus.cpp
 )
 
 # 为我们的库指定头文件目录，这样其他目标可以轻松找到它
