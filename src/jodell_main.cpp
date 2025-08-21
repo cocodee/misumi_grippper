@@ -1,25 +1,55 @@
 // src/main.cpp
-#include "GripperBus.hpp"
-#include "JodellGrippper.hpp"
+// 注意：请确保头文件名与您的项目文件一致
+#include "GripperBus.hpp"   // 或者 "GripperBus.hpp"
+#include "gripper.h"       // 或者 "JodellGrippper.hpp"
 #include <iostream>
 #include <thread>
 #include <chrono>
 #include <limits> // 用于 std::numeric_limits
+#include <string> // 用于 std::stoi
 
-// --- 配置区 ---
-// 在 Linux 上可能是 "/dev/ttyUSB0", 在 Windows 上是 "COM3" 等
-const std::string SERIAL_PORT = "/dev/ttyUSB0"; 
-const int SLAVE_ID = 9; // 夹爪的默认从站 ID
-// --- 配置区结束 ---
+// 打印程序用法
+void printUsage(const char* prog_name) {
+    std::cerr << "\nUsage: " << prog_name << " <serial_port> <slave_id>\n";
+    std::cerr << "  <serial_port>: The serial device name (e.g., /dev/ttyUSB0 on Linux, COM3 on Windows)\n";
+    std::cerr << "  <slave_id>: The Modbus slave ID of the gripper (e.g., 9)\n\n";
+    std::cerr << "Example (Linux):   " << prog_name << " /dev/ttyUSB0 9\n";
+    std::cerr << "Example (Windows): " << prog_name << " COM3 9\n";
+}
 
 // 辅助函数：等待用户按 Enter 键继续
 void pressEnterToContinue() {
     std::cout << "\n... 按 Enter 键继续 ...\n" << std::endl;
+    // 清空输入缓冲区，以防之前的输入影响
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::cin.get();
 }
 
-int main() {
-    std::cout << "========= Jodell EPG Gripper Library Test Suite =========\n" << std::endl;
+int main(int argc, char* argv[]) {
+    // --- 0. 参数解析与验证 ---
+    if (argc != 3) {
+        printUsage(argv[0]);
+        return 1;
+    }
+
+    std::string SERIAL_PORT = argv[1];
+    int SLAVE_ID = 0;
+
+    try {
+        SLAVE_ID = std::stoi(argv[2]);
+    } catch (const std::exception& e) {
+        std::cerr << "Error: Invalid Slave ID '" << argv[2] << "'. Must be a number." << std::endl;
+        printUsage(argv[0]);
+        return 1;
+    }
+
+    if (SLAVE_ID < 1 || SLAVE_ID > 247) {
+        std::cerr << "Error: Slave ID must be between 1 and 247." << std::endl;
+        return 1;
+    }
+
+    std::cout << "========= Jodell EPG Gripper Library Test Suite =========\n";
+    std::cout << "Config: Port=" << SERIAL_PORT << ", Slave ID=" << SLAVE_ID << "\n" << std::endl;
 
     // --- 1. GripperBus 连接测试 ---
     std::cout << "--- [1] 测试 GripperBus 连接 ---" << std::endl;
@@ -36,19 +66,20 @@ int main() {
     std::cout << "b) 尝试连接到配置的串口: " << SERIAL_PORT << " ..." << std::endl;
     GripperBus bus(SERIAL_PORT);
     if (!bus.connect()) {
-        std::cerr << "错误: 无法连接到串口 " << SERIAL_PORT << ". 请检查端口名和权限。" << std::endl;
+        std::cerr << "错误: 无法连接到串口 " << SERIAL_PORT << ". 请检查端口名、权限和硬件连接。" << std::endl;
         return -1;
     }
     std::cout << "成功: 串口连接成功。\n" << std::endl;
 
     // --- 2. Gripper 初始化和使能测试 ---
     std::cout << "--- [2] 测试 Gripper 初始化和使能 ---" << std::endl;
-    JodellGripper gripper(bus, SLAVE_ID);
+    // 假设您的夹爪类名为 Gripper
+    Gripper gripper(bus, SLAVE_ID);
     GripperStatus status;
 
     std::cout << "a) 使能 (激活) 夹爪 ID: " << SLAVE_ID << "..." << std::endl;
     if (!gripper.enable()) {
-        std::cerr << "错误: 使能夹爪失败。" << std::endl;
+        std::cerr << "错误: 使能夹爪失败。请检查夹爪是否已上电且连接正常。" << std::endl;
         bus.disconnect();
         return -1;
     }
