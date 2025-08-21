@@ -52,18 +52,46 @@ int main(int argc, char* argv[]) {
     // 1. 创建夹爪对象
     MisumiGripper gripper(*m_gripper_bus, slave_id);
 
-  
-
     // 3. 使能夹爪
     std::cout << "Enabling gripper..." << std::endl;
     if (!gripper.enable()) {
         std::cerr << "Error enabling: " << gripper.getLastError() << std::endl;
         return -1;
     }
+
+ 
+    // 9. 断开连接 (析构函数会自动调用, 这里显式调用作为演示)
+    std::cout << "Disconnecting..." << std::endl;
+    m_gripper_bus->disconnect();
+
     // 等待使能完成 (搜索行程)
     std::cout << "Waiting for gripper to finish homing..." << std::endl;
     std::this_thread::sleep_for(std::chrono::seconds(5)); 
 
+    // 1. 获取开始时间点
+    auto start_time = std::chrono::high_resolution_clock::now();
+
+    // 2. 执行 test2 函数
+    test2(gripper);
+
+    // 3. 获取结束时间点
+    auto end_time = std::chrono::high_resolution_clock::now();
+
+    // 4. 计算时间差
+    std::chrono::duration<double, std::milli> elapsed_time = end_time - start_time;
+              << std::fixed << std::setprecision(2) << elapsed_time.count() 
+              << " ms" << std::endl;
+
+    std::cout << "Demo finished." << std::endl;
+
+    return 0;
+}
+void test2(MisumiGripper& gripper){
+    if (!gripper.moveTo(10.0, 50, 80)) {
+         std::cerr << "Error moving to position: " << gripper.getLastError() << std::endl;
+    }
+}
+void test1(MisumiGripper& gripper){
     // 4. 读取并打印状态
     GripperStatus status;
     if (gripper.readStatus(status)) {
@@ -117,11 +145,5 @@ int main(int argc, char* argv[]) {
     gripper.disable();
     std::this_thread::sleep_for(std::chrono::seconds(1));
 
-    // 9. 断开连接 (析构函数会自动调用, 这里显式调用作为演示)
-    std::cout << "Disconnecting..." << std::endl;
-    m_gripper_bus->disconnect();
-    
-    std::cout << "Demo finished." << std::endl;
 
-    return 0;
 }
