@@ -137,6 +137,7 @@ int main(int argc, char* argv[]) {
 
     // 4. 计算时间差
     std::chrono::duration<double, std::milli> elapsed_time = end_time - start_time;
+    std::cout << "test2 execution took: " 
               << std::fixed << std::setprecision(2) << elapsed_time.count() 
               << " ms" << std::endl;
 
