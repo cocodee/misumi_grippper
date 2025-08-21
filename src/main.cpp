@@ -2,7 +2,7 @@
 #include <iostream>
 #include <thread> // for std::this_thread::sleep_for
 #include <chrono> // for std::chrono::seconds
-
+#include <iomanip> 
 void printStatus(const GripperStatus& status) {
     std::cout << "------ Gripper Status ------" << std::endl;
     std::cout << "Enabled: " << (status.is_enabled ? "Yes" : "No") << std::endl;
