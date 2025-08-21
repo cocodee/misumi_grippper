@@ -13,8 +13,68 @@ void printStatus(const GripperStatus& status) {
     std::cout << "Torque: " << status.torque_percent << " %" << std::endl;
     std::cout << "----------------------------" << std::endl;
 }
+void test2(MisumiGripper& gripper){
+    if (!gripper.moveTo(10.0, 50, 80)) {
+         std::cerr << "Error moving to position: " << gripper.getLastError() << std::endl;
+    }
+}
+
+void test1(MisumiGripper& gripper){
+    // 4. 读取并打印状态
+    GripperStatus status;
+    if (gripper.readStatus(status)) {
+        printStatus(status);
+    } else {
+        std::cerr << "Error reading status: " << gripper.getLastError() << std::endl;
+    }
+
+    // 5. 完全打开夹爪
+    std::cout << "\nOpening gripper..." << std::endl;
+    if (!gripper.open()) {
+        std::cerr << "Error opening: " << gripper.getLastError() << std::endl;
+    }
+    std::this_thread::sleep_for(std::chrono::seconds(3));
+    if (gripper.readStatus(status)) {
+        printStatus(status);
+    }
+    
+    // 6. 移动到指定位置
+    std::cout << "\nMoving to 10.0 mm with 50% speed and 80% torque..." << std::endl;
+    if (!gripper.moveTo(10.0, 50, 80)) {
+         std::cerr << "Error moving to position: " << gripper.getLastError() << std::endl;
+    }
+    std::this_thread::sleep_for(std::chrono::seconds(3));
+    if (gripper.readStatus(status)) {
+        printStatus(status);
+    }
 
 
+    // 7. 完全关闭夹爪
+    std::cout << "\nClosing gripper..." << std::endl;
+    if (!gripper.grip()) {
+        std::cerr << "Error closing: " << gripper.getLastError() << std::endl;
+    }
+    std::this_thread::sleep_for(std::chrono::seconds(3));
+    if (gripper.readStatus(status)) {
+        printStatus(status);
+    }
+
+    // 6. 移动到指定位置
+    std::cout << "\nMoving to 40.0 mm with 50% speed and 80% torque..." << std::endl;
+    if (!gripper.moveTo(40.0, 50, 80)) {
+         std::cerr << "Error moving to position: " << gripper.getLastError() << std::endl;
+    }
+    std::this_thread::sleep_for(std::chrono::seconds(3));
+    if (gripper.readStatus(status)) {
+        printStatus(status);
+    }    
+    // 8. 去使能
+    std::cout << "\nDisabling gripper..." << std::endl;
+    gripper.disable();
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+
+
+}
 // main 函数现在接收命令行参数 argc 和 argv
 int main(int argc, char* argv[]) {
     // --- 1. 解析命令行参数 ---
@@ -87,64 +147,4 @@ int main(int argc, char* argv[]) {
 
     return 0;
 }
-void test2(MisumiGripper& gripper){
-    if (!gripper.moveTo(10.0, 50, 80)) {
-         std::cerr << "Error moving to position: " << gripper.getLastError() << std::endl;
-    }
-}
-void test1(MisumiGripper& gripper){
-    // 4. 读取并打印状态
-    GripperStatus status;
-    if (gripper.readStatus(status)) {
-        printStatus(status);
-    } else {
-        std::cerr << "Error reading status: " << gripper.getLastError() << std::endl;
-    }
 
-    // 5. 完全打开夹爪
-    std::cout << "\nOpening gripper..." << std::endl;
-    if (!gripper.open()) {
-        std::cerr << "Error opening: " << gripper.getLastError() << std::endl;
-    }
-    std::this_thread::sleep_for(std::chrono::seconds(3));
-    if (gripper.readStatus(status)) {
-        printStatus(status);
-    }
-    
-    // 6. 移动到指定位置
-    std::cout << "\nMoving to 10.0 mm with 50% speed and 80% torque..." << std::endl;
-    if (!gripper.moveTo(10.0, 50, 80)) {
-         std::cerr << "Error moving to position: " << gripper.getLastError() << std::endl;
-    }
-    std::this_thread::sleep_for(std::chrono::seconds(3));
-    if (gripper.readStatus(status)) {
-        printStatus(status);
-    }
-
-
-    // 7. 完全关闭夹爪
-    std::cout << "\nClosing gripper..." << std::endl;
-    if (!gripper.grip()) {
-        std::cerr << "Error closing: " << gripper.getLastError() << std::endl;
-    }
-    std::this_thread::sleep_for(std::chrono::seconds(3));
-    if (gripper.readStatus(status)) {
-        printStatus(status);
-    }
-
-    // 6. 移动到指定位置
-    std::cout << "\nMoving to 40.0 mm with 50% speed and 80% torque..." << std::endl;
-    if (!gripper.moveTo(40.0, 50, 80)) {
-         std::cerr << "Error moving to position: " << gripper.getLastError() << std::endl;
-    }
-    std::this_thread::sleep_for(std::chrono::seconds(3));
-    if (gripper.readStatus(status)) {
-        printStatus(status);
-    }    
-    // 8. 去使能
-    std::cout << "\nDisabling gripper..." << std::endl;
-    gripper.disable();
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-
-
-}
