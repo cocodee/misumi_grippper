@@ -20,9 +20,18 @@ add_library(misumi_gripper_lib SHARED
     MisumiGripperBus.cpp
 )
 
+add_library(jodell_gripper_lib SHARED
+    JodellGripper.cpp
+    GripperBus.cpp
+)
+
 # 为我们的库指定头文件目录，这样其他目标可以轻松找到它
 # PUBLIC 表示使用这个库的目标也会自动包含这个目录
 target_include_directories(misumi_gripper_lib PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+target_include_directories(jodell_gripper_lib PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
@@ -33,23 +42,39 @@ target_link_libraries(misumi_gripper_lib PUBLIC
     libmodbus::modbus
 )
 
+target_link_libraries(jodell_gripper_lib PUBLIC
+    libmodbus::modbus
+)
 # --- 定义可执行文件 ---
 # 创建我们的主程序可执行文件
-add_executable(run_gripper
-    main.cpp
+add_executable(run_misumi_gripper
+    misumi_main.cpp
 )
 
+add_executable(run_jodell_gripper
+    jodell_main.cpp
+)
 # 将主程序链接到我们自己创建的夹爪库
-target_link_libraries(run_gripper PRIVATE
+target_link_libraries(run_misumi_gripper PRIVATE
     misumi_gripper_lib
+)
+
+target_link_libraries(run_jodell_gripper PRIVATE
+    jodell_gripper_lib
 )
 
 # --- 安装规则 (可选，但推荐) ---
 # 这部分定义了 `make install` 命令的行为
 # 它会将编译好的库、可执行文件和头文件安装到指定的系统目录
-install(TARGETS run_gripper DESTINATION bin)
+install(TARGETS run_misumi_gripper DESTINATION bin)
 install(TARGETS misumi_gripper_lib DESTINATION lib)
-install(FILES MisumiGripper.h DESTINATION include)
+install(FILES MisumiGripper.hpp DESTINATION include)
+install(FILES MisumiGripperBus.hpp DESTINATION include)
+
+install(TARGETS run_jodell_gripper DESTINATION bin)
+install(TARGETS jodell_gripper_lib DESTINATION lib)
+install(FILES JodellGripper.hpp DESTINATION include)
+install(FILES GripperBus.hpp DESTINATION include)
 
 # --- 打印信息 ---
 # 在配置时打印找到的 libmodbus 版本，方便调试
