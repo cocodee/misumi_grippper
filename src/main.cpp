@@ -60,9 +60,7 @@ int main(int argc, char* argv[]) {
     }
 
  
-    // 9. 断开连接 (析构函数会自动调用, 这里显式调用作为演示)
-    std::cout << "Disconnecting..." << std::endl;
-    m_gripper_bus->disconnect();
+
 
     // 等待使能完成 (搜索行程)
     std::cout << "Waiting for gripper to finish homing..." << std::endl;
@@ -82,6 +80,9 @@ int main(int argc, char* argv[]) {
               << std::fixed << std::setprecision(2) << elapsed_time.count() 
               << " ms" << std::endl;
 
+    // 9. 断开连接 (析构函数会自动调用, 这里显式调用作为演示)
+    std::cout << "Disconnecting..." << std::endl;
+    m_gripper_bus->disconnect();
     std::cout << "Demo finished." << std::endl;
 
     return 0;
