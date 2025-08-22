@@ -53,14 +53,17 @@ bool JodellGripper::enable() {
         return false;
     }
     */
+    /*
     uint16_t data_to_write[1] = {0x0001};
 
     // 2. 调用 modbus_write_registers
     //    参数分别为: 上下文, 起始地址, 写入寄存器数量 (1), 数据指针
+    
     if (modbus_write_registers(ctx, REG_CONTROL, 1, data_to_write) == -1) {
         std::cerr << "Failed to enable gripper " << slave_id_ << " using 'write multiple': " << modbus_strerror(errno) << std::endl;
         return false;
     }
+    */
     return true;
 }
 
