@@ -47,13 +47,13 @@ bool JodellGripper::enable() {
     
     // 写入 0x0001 到控制寄存器 (0x03E8) 来使能夹爪
     // rACT = 1 (bit 0)
-    
+    /*
     if (modbus_write_register(ctx, REG_CONTROL, 0x0001) == -1) {
         std::cerr << "Failed to enable gripper " << slave_id_ << ": " << modbus_strerror(errno) << std::endl;
         return false;
     }
+    */
     
-    /*
     uint16_t data_to_write[1] = {0x0001};
 
     // 2. 调用 modbus_write_registers
@@ -63,7 +63,7 @@ bool JodellGripper::enable() {
         std::cerr << "Failed to enable gripper " << slave_id_ << " using 'write multiple': " << modbus_strerror(errno) << std::endl;
         return false;
     }
-    */
+    
     return true;
 }
 
