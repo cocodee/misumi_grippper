@@ -14,6 +14,8 @@ GripperBus::GripperBus(const std::string& device, int baud, char parity, int dat
     if (ctx_ == nullptr) {
         std::cerr << "Failed to create modbus context for " << device_ << std::endl;
     } else {
+        std::cout << "[DEBUG] libmodbus debugging enabled." << std::endl;
+        modbus_set_debug(ctx_, TRUE);
         // 设置响应超时时间为 1 秒
         modbus_set_response_timeout(ctx_, 1, 0);
     }
