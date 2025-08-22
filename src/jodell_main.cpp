@@ -74,7 +74,7 @@ int main(int argc, char* argv[]) {
     std::cout << "Config: Port=" << SERIAL_PORT << ", Slave ID=" << SLAVE_ID << "\n" << std::endl;
 
     GripperBus bus(SERIAL_PORT);
-    Gripper gripper(bus, SLAVE_ID);
+    JodellGripper gripper(bus, SLAVE_ID);
     GripperStatus status;
 
     // --- 1. GripperBus 连接测试 ---
