@@ -1,7 +1,7 @@
 // src/main.cpp
 // 注意：请确保头文件名与您的项目文件一致
-#include "gripper_bus.h"   // 或者 "GripperBus.hpp"
-#include "gripper.h"       // 或者 "JodellGrippper.hpp"
+#include "GripperBus.hpp"   // 或者 "GripperBus.hpp"
+#include "JodellGripper.hpp"       // 或者 "JodellGrippper.hpp"
 #include <iostream>
 #include <thread>
 #include <chrono>
