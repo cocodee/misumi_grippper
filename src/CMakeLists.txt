@@ -12,6 +12,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 # 查找 libmodbus 库
 # find_package 是现代 CMake 查找库的标准方式
 find_package(libmodbus REQUIRED)
+find_package(pybind11 REQUIRED)
 
 # --- 定义库 ---
 # 将我们的夹爪控制逻辑编译成一个静态库 (misumi_gripper_lib)
@@ -25,6 +26,10 @@ add_library(jodell_gripper_lib SHARED
     GripperBus.cpp
 )
 
+pybind11_add_module(
+    jodell_gripper_py # 模块名
+    jodell_bindings.cpp    # 绑定源文件
+)
 # 为我们的库指定头文件目录，这样其他目标可以轻松找到它
 # PUBLIC 表示使用这个库的目标也会自动包含这个目录
 target_include_directories(misumi_gripper_lib PUBLIC
@@ -34,6 +39,7 @@ target_include_directories(misumi_gripper_lib PUBLIC
 target_include_directories(jodell_gripper_lib PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
+
 
 # 将 misumi_gripper_lib 链接到 libmodbus
 # PUBLIC 表示链接关系会传递，如果其他目标链接了 misumi_gripper_lib，
@@ -62,6 +68,9 @@ target_link_libraries(run_misumi_gripper PRIVATE
 target_link_libraries(run_jodell_gripper PRIVATE
     jodell_gripper_lib
 )
+
+target_include_directories(jodell_gripper_py PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_link_libraries(jodell_gripper_py PRIVATE jodell_gripper_lib)
 
 # --- 安装规则 (可选，但推荐) ---
 # 这部分定义了 `make install` 命令的行为
