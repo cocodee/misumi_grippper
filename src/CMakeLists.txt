@@ -30,6 +30,11 @@ pybind11_add_module(
     jodell_gripper_py # 模块名
     jodell_bindings.cpp    # 绑定源文件
 )
+
+pybind11_add_module(
+    misumi_gripper_py # 模块名
+    misumi_bindings.cpp    # 绑定源文件
+)
 # 为我们的库指定头文件目录，这样其他目标可以轻松找到它
 # PUBLIC 表示使用这个库的目标也会自动包含这个目录
 target_include_directories(misumi_gripper_lib PUBLIC
@@ -71,6 +76,9 @@ target_link_libraries(run_jodell_gripper PRIVATE
 
 target_include_directories(jodell_gripper_py PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_link_libraries(jodell_gripper_py PRIVATE jodell_gripper_lib)
+
+target_include_directories(misumi_gripper_py PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_link_libraries(misumi_gripper_py PRIVATE misumi_gripper_lib)
 
 # --- 安装规则 (可选，但推荐) ---
 # 这部分定义了 `make install` 命令的行为
