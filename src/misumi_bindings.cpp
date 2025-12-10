@@ -1,7 +1,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h> // 用于 std::string 和 std::vector 的转换
-#include "MisumiGripper.h" // 包含你的头文件
-#include "MisumiGripperBus.h"
+#include "MisumiGripper.hpp" // 包含你的头文件
+#include "MisumiGripperBus.hpp"
 namespace py = pybind11;
 
 PYBIND11_MODULE(misumi_gripper_py, m) {
