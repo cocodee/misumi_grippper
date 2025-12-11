@@ -62,13 +62,19 @@ def run_gripper_control(device_name, client_id):
     # 动作 2: 移动到 20.0mm
     target_pos = 20.0
     print(f"移动到 {target_pos}mm...")
-    gripper.moveTo(target_pos, 50, 50)
+    gripper.moveTo(target_pos, 100, 50)
     time.sleep(2)
     
+     # 动作 2: 移动到 20.0mm
+    target_pos = 40.0
+    print(f"移动到 {target_pos}mm...")
+    gripper.moveTo(target_pos, 100, 50)
+    time.sleep(2)
+       
     # 动作 3: 回到 0.0mm
     target_pos = 0.0
     print(f"移动到 {target_pos}mm...")
-    gripper.moveTo(target_pos, 50, 50)
+    gripper.moveTo(target_pos, 100, 50)
     time.sleep(5) # 等待动作完成
 
     # 7. 关闭连接
