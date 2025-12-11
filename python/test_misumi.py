@@ -36,8 +36,12 @@ def main():
         print(f"详细状态: {raw_status}") # 会调用绑定的 __repr__
     
     # 6. 移动
-    gripper.moveTo(10.0, 50, 30) # 位置10mm, 速度50%, 力矩30%
+    gripper.moveTo(0.0, 100, 50) # 位置10mm, 速度50%, 力矩30%
     
+    time.sleep(2)
+    gripper.moveTo(20.0, 50, 50)
+    time.sleep(2)
+    gripper.moveTo(0.0, 50, 50)
     # 7. 关闭连接
     bus.disconnect()
 
