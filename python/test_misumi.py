@@ -42,6 +42,7 @@ def main():
     gripper.moveTo(20.0, 50, 50)
     time.sleep(2)
     gripper.moveTo(0.0, 50, 50)
+    time.sleep(5)
     # 7. 关闭连接
     bus.disconnect()
 
