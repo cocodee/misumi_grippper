@@ -9,6 +9,10 @@ MisumiGripperBus::MisumiGripperBus(const std::string& device, int baud_rate, cha
         m_last_error = "Failed to create Modbus RTU context.";
         std::cerr << m_last_error << std::endl;
     }
+    //std::cout << "[DEBUG] libmodbus debugging enabled." << std::endl;
+    modbus_set_debug(m_ctx, TRUE);
+    // 设置响应超时时间为 1 秒
+    modbus_set_response_timeout(m_ctx, 1, 0);  
 }
 
 MisumiGripperBus::~MisumiGripperBus() {
