@@ -8,7 +8,7 @@ PYBIND11_MODULE(misumi_gripper_py, m) {
     m.doc() = "Misumi Gripper Python Bindings";
 
     // 1. 绑定 GripperStatus 结构体
-    py::class_<GripperStatus>(m, "GripperStatus")
+    py::class_<GripperStatus>(m, "MisumiGripperStatus")
         .def(py::init<>())
         .def_readwrite("is_enabled", &GripperStatus::is_enabled)
         .def_readwrite("fault_code", &GripperStatus::fault_code)
