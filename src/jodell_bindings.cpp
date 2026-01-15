@@ -33,7 +33,7 @@ PYBIND11_MODULE(jodell_gripper_py, m) {
 
     // --- 绑定 GripperStatus 结构体 ---
     // 将其绑定为一个 Python 类
-    py::class_<GripperStatus>(m, "JodellGripperStatus")
+    py::class_<GripperStatus>(m, "JodellGripperStatus", py::module_local()) 
         .def(py::init<>()) // 默认构造函数
         .def_readwrite("enabled", &GripperStatus::enabled)
         .def_readwrite("is_moving", &GripperStatus::is_moving)
